@@ -1,0 +1,23 @@
+﻿lang: EN
+shortKeys:
+  - command: Load
+    key: F5
+    modifier: Control, Shift 
+  - command: Import
+    key: F3
+    modifier: Control, Shift
+  - command: Edit
+    key: F2
+    modifier: Control, Shift
+  - command: Up
+    key: F4
+    modifier: Control, Shift
+  - command: Down
+    key: F1
+    modifier: Control, Shift
+
+profiles:
+  - type: Custom
+    location: D:\Perso\Tests
+    saveFile: C:\Users\Nicolas\Documents\dangereux.pdf
+    name: Namea

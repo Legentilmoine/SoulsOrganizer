@@ -1,0 +1,1 @@
+@POWERSHELL "&{Try { ./build.ps1 -target Deploy; exit $lastExitCode; } Catch { exit -1; }}" 

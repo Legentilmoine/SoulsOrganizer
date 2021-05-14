@@ -1,0 +1,4 @@
+next-version: 0.0.1
+assembly-versioning-scheme: MajorMinorPatchTag
+increment: None
+
