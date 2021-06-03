@@ -21,6 +21,8 @@ namespace SoulsOrganizer.Configs
             {
                 if (_instance == null)
                     _instance = Read();
+                if (_instance.Profiles == null)
+                    _instance.Profiles = new List<Profile>();
                 return _instance;
             }
         }

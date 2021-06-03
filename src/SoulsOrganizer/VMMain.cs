@@ -43,6 +43,22 @@ namespace SoulsOrganizer
             }
         }
 
+        public ObservableCollection<Log> Logs
+        {
+            get
+            {
+                return LogManagement.Logs;
+            }
+        }
+
+        public Log Last
+        {
+            get
+            {
+                return LogManagement.Last;
+            }
+        }
+
         public ShortKey Load
         {
             get
@@ -187,6 +203,7 @@ namespace SoulsOrganizer
             SelectedProfile = newProfile;
             InitilizeSaves();
             UpdateConfigFile();
+            NotifyPropertyChanged("Last");
         }
 
         private Profile CreateNewProfile(Profile baseProfile = null)
@@ -201,9 +218,9 @@ namespace SoulsOrganizer
         public void UpdateProfile()
         {
             SelectedProfile.Rename(EditProfile.Name);
-            SelectedProfile.Move(EditProfile.Location);
             SelectedProfile.SaveFile = EditProfile.SaveFile;
             UpdateConfigFile();
+            NotifyPropertyChanged("Last");
         }
 
         public void DuplicateProfile()
@@ -218,6 +235,7 @@ namespace SoulsOrganizer
                 SelectedProfile = profile;
                 UpdateConfigFile();
             }
+            NotifyPropertyChanged("Last");
         }
 
         public void DeleteProfile(bool deleteFolder = true)
@@ -229,6 +247,7 @@ namespace SoulsOrganizer
             Profiles.Remove(SelectedProfile);
             SelectedProfile = Profiles.FirstOrDefault();
             UpdateConfigFile();
+            NotifyPropertyChanged("Last");
         }
 
         private void UpdateConfigFile()
@@ -239,7 +258,7 @@ namespace SoulsOrganizer
 
         public void SortProfiles()
         {
-            Profiles.Sort((a, b) => a.Name.CompareTo(b.Name));
+            Profiles.Sort((a, b) => string.Compare(a?.Name ?? "", b?.Name ?? ""));
         }
 
         #endregion
@@ -248,6 +267,7 @@ namespace SoulsOrganizer
         private void SelectedSaveChanged()
         {
             EditSave = SelectedSave != null ? SelectedSave.Name : "Save";
+            NotifyPropertyChanged("Last");
         }
 
         public void InitilizeSaves()
@@ -264,6 +284,7 @@ namespace SoulsOrganizer
                 SelectedSave.Delete();
             Saves.Remove(SelectedSave);
             SelectedSave = Saves.FirstOrDefault();
+            NotifyPropertyChanged("Last");
         }
 
         public void LoadSave()
@@ -271,6 +292,7 @@ namespace SoulsOrganizer
             if (SelectedSave == null)
                 return;
             SelectedSave.Restore();
+            NotifyPropertyChanged("Last");
         }
 
         public void ImportSave()
@@ -282,6 +304,7 @@ namespace SoulsOrganizer
             Saves.Add(save);
             SortSaves();
             SelectedSave = save;
+            NotifyPropertyChanged("Last");
         }
 
         public void DuplicateSave()
@@ -295,6 +318,7 @@ namespace SoulsOrganizer
                 SortSaves();
                 SelectedSave = save;
             }
+            NotifyPropertyChanged("Last");
         }
 
         public void UpdateSave()
@@ -303,6 +327,7 @@ namespace SoulsOrganizer
             SelectedSave.Rename(EditSave);
             SortSaves();
             SelectedSave = selected;
+            NotifyPropertyChanged("Last");
         }
 
         public void UpSave()

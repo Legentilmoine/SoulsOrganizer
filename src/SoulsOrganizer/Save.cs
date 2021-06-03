@@ -38,16 +38,20 @@ namespace SoulsOrganizer
                 var name = $"{Name}_copy";
                 var newDossier = System.IO.Path.Combine(_profile.SaveFolder, name);
                 DirectoryExtension.Copy(dossier, newDossier);
+                LogManagement.AddInfo($"Save {Name} copied.");
                 return new Save(_profile, name);
             }
             catch (UnauthorizedAccessException)
             {
+                LogManagement.AddError("Unauthorized access: Unable to copy save.");
             }
             catch (System.IO.PathTooLongException)
             {
+                LogManagement.AddError("Path too long: Unable to copy save.");
             }
             catch (System.IO.DirectoryNotFoundException)
             {
+                LogManagement.AddError("Directory not found: Unable to copy save.");
             }
             return null;
         }
@@ -64,15 +68,19 @@ namespace SoulsOrganizer
                 if (System.IO.Directory.Exists(dossier))
                     System.IO.Directory.Move(dossier, newDossier);
                 Name = newName;
+                LogManagement.AddInfo($"Save {Name} renamed.");
             }
             catch (UnauthorizedAccessException)
             {
+                LogManagement.AddError("Unauthorized access: Unable to rename save.");
             }
             catch (System.IO.PathTooLongException)
             {
+                LogManagement.AddError("Path too long: Unable to rename save.");
             }
             catch (System.IO.DirectoryNotFoundException)
             {
+                LogManagement.AddError("Directory not found: Unable to rename save.");
             }
         }
 
@@ -83,15 +91,19 @@ namespace SoulsOrganizer
                 var dossier = System.IO.Path.Combine(_profile.SaveFolder, Name);
                 if (System.IO.Directory.Exists(dossier))
                     System.IO.Directory.Delete(dossier, true);
+                LogManagement.AddInfo($"Save {Name} deleted.");
             }
             catch (UnauthorizedAccessException)
             {
+                LogManagement.AddError("Unauthorized access: Unable to delete save.");
             }
             catch (System.IO.PathTooLongException)
             {
+                LogManagement.AddError("Path too long: Unable to delete save.");
             }
             catch (System.IO.DirectoryNotFoundException)
             {
+                LogManagement.AddError("Directory not found: Unable to delete save.");
             }
         }
 
@@ -104,18 +116,23 @@ namespace SoulsOrganizer
                     System.IO.Directory.CreateDirectory(dossier);
                 var fileDestination = System.IO.Path.Combine(dossier, System.IO.Path.GetFileName(_profile.SaveFile));
                 System.IO.File.Copy(_profile.SaveFile, fileDestination);
+                LogManagement.AddInfo($"Save {Name} created.");
             }
             catch (UnauthorizedAccessException)
             {
+                LogManagement.AddError("Unauthorized access: Unable to create save.");
             }
             catch (System.IO.PathTooLongException)
             {
+                LogManagement.AddError("Path too long: Unable to create save.");
             }
             catch (System.IO.DirectoryNotFoundException)
             {
+                LogManagement.AddError("Directory not found: Unable to create save.");
             }
             catch (System.IO.FileNotFoundException)
             {
+                LogManagement.AddError("File not found: Unable to create save.");
             }
         }
 
@@ -127,18 +144,23 @@ namespace SoulsOrganizer
                 var saveFileName = System.IO.Path.GetFileName(_profile.SaveFile);
                 var fileToCopy = System.IO.Path.Combine(dossier, System.IO.Path.GetFileName(saveFileName));
                 System.IO.File.Copy(fileToCopy, _profile.SaveFile, true);
+                LogManagement.AddInfo($"Save {Name} restored.");
             }
             catch (UnauthorizedAccessException)
             {
+                LogManagement.AddError("Unauthorized access: Unable to restore save.");
             }
             catch (System.IO.PathTooLongException)
             {
+                LogManagement.AddError("Path too long: Unable to restore save.");
             }
             catch (System.IO.DirectoryNotFoundException)
             {
+                LogManagement.AddError("Directory not found: Unable to restore save.");
             }
             catch (System.IO.FileNotFoundException)
             {
+                LogManagement.AddError("File not found: Unable to restore save.");
             }
         }
 

@@ -88,6 +88,7 @@
     <Compile Include="Converters\ConverterNullToBoolean.cs" />
     <Compile Include="Converters\ConverterNullToVisibility.cs" />
     <Compile Include="Converters\MultiConvecterBoolean.cs" />
+    <Compile Include="LogManagement.cs" />
     <Compile Include="Tools\DirectoryExtension.cs" />
     <Compile Include="Tools\ObservableCollectionExtension.cs" />
     <Compile Include="Profile.cs" />

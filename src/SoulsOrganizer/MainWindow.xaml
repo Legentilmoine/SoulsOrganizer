@@ -208,6 +208,26 @@
             </Button>
         </Grid>
 
+        <Grid Grid.Column="1" Grid.Row="7">
+            <TextBlock Text="{Binding Last}">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Last.Type}" Value="Info">
+                                <Setter Property="Foreground" Value="LightGreen"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Last.Type}" Value="Warning">
+                                <Setter Property="Foreground" Value="Orange"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Last.Type}" Value="Error">
+                                <Setter Property="Foreground" Value="Salmon"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+
         <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="7" Background="#66000000"
               Visibility="{Binding DisplaySettings, Converter={StaticResource ConvBoolToVisibility}}">
 
@@ -285,7 +305,23 @@
             </GroupBox>
 
             <GroupBox Header="Logs" Grid.Row="5" Grid.Column="1">
-                <ListBox ItemsSource="{Binding Logs}"/>
+                <ListBox ItemsSource="{Binding Logs}">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Type}" Value="Info">
+                                    <Setter Property="TextElement.Foreground" Value="LightGreen"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type}" Value="Warning">
+                                    <Setter Property="TextElement.Foreground" Value="Orange"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type}" Value="Error">
+                                    <Setter Property="TextElement.Foreground" Value="Salmon"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
             </GroupBox>
 
         </Grid>

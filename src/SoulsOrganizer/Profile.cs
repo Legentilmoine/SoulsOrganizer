@@ -113,38 +113,16 @@ namespace SoulsOrganizer
                     return true;
                 var newFolder = System.IO.Path.Combine(Location, newName);
                 System.IO.Directory.Move(oldFolder, newFolder);
+                LogManagement.AddInfo($"Profile {Name} renamed.");
                 return true;
             }
             catch (UnauthorizedAccessException)
             {
+                LogManagement.AddError("Unauthorized access: Unable to rename profile.");
             }
             catch (System.IO.PathTooLongException)
             {
-            }
-            return false;
-        }
-
-        public bool Move(string newLocation)
-        {
-            if (string.Equals(Location, newLocation))
-                return true;
-
-            try
-            {
-                var oldLocation = Location;
-                Location = newLocation;
-                if (oldLocation == null || !System.IO.Directory.Exists(SaveFolder))
-                    return true;
-                var oldFolder = System.IO.Path.Combine(oldLocation, Name);
-                var newFolder = System.IO.Path.Combine(newLocation, Name);
-                System.IO.Directory.Move(oldFolder, newFolder);
-                return true;
-            }
-            catch (UnauthorizedAccessException)
-            {
-            }
-            catch (System.IO.PathTooLongException)
-            {
+                LogManagement.AddError("Path too long: Unable to rename profile.");
             }
             return false;
         }
@@ -156,16 +134,20 @@ namespace SoulsOrganizer
                 var name = $"{Name}_copy";
                 var newDossier = System.IO.Path.Combine(Location, name);
                 DirectoryExtension.Copy(SaveFolder, newDossier);
+                LogManagement.AddInfo($"Profile {Name} copied.");
                 return new Profile(name, SaveFile, Location);
             }
             catch (UnauthorizedAccessException)
             {
+                LogManagement.AddError("Unauthorized access: Unable to copy profile.");
             }
             catch (System.IO.PathTooLongException)
             {
+                LogManagement.AddError("Path too long: Unable to copy profile.");
             }
             catch (System.IO.DirectoryNotFoundException)
             {
+                LogManagement.AddError("Directory not found: Unable to copy profile.");
             }
             return null;
         }
@@ -176,15 +158,19 @@ namespace SoulsOrganizer
             {
                 if (System.IO.Directory.Exists(SaveFolder))
                     System.IO.Directory.Delete(SaveFolder, true);
+                LogManagement.AddInfo($"Profile {Name} deleted.");
             }
             catch (UnauthorizedAccessException)
             {
+                LogManagement.AddError("Unauthorized access: Unable to delete profile.");
             }
             catch (System.IO.PathTooLongException)
             {
+                LogManagement.AddError("Path too long: Unable to delete profile.");
             }
             catch (System.IO.DirectoryNotFoundException)
             {
+                LogManagement.AddError("Directory not found: Unable to delete profile.");
             }
         }
 
@@ -194,15 +180,19 @@ namespace SoulsOrganizer
             {
                 if (!System.IO.Directory.Exists(SaveFolder))
                     System.IO.Directory.CreateDirectory(SaveFolder);
+                LogManagement.AddInfo($"Profile {Name} created.");
             }
             catch (UnauthorizedAccessException)
             {
+                LogManagement.AddError("Unauthorized access: Unable to create profile.");
             }
             catch (System.IO.PathTooLongException)
             {
+                LogManagement.AddError("Path too long: Unable to create profile.");
             }
             catch (System.IO.DirectoryNotFoundException)
             {
+                LogManagement.AddError("Directory not found: Unable to create profile.");
             }
         }
 

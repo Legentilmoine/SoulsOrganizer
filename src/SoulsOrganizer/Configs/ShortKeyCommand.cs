@@ -8,7 +8,7 @@ namespace SoulsOrganizer.Configs
         Load = 1,
         Import,
         Edit,
-        Up, 
+        Up,
         Down
     }
 }
