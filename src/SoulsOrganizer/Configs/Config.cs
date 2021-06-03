@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
 namespace SoulsOrganizer.Configs
