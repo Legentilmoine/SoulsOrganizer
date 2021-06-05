@@ -88,11 +88,6 @@
     <Compile Include="Converters\ConverterNullToBoolean.cs" />
     <Compile Include="Converters\ConverterNullToVisibility.cs" />
     <Compile Include="Converters\MultiConvecterBoolean.cs" />
-    <Compile Include="LogManagement.cs" />
-    <Compile Include="Tools\DirectoryExtension.cs" />
-    <Compile Include="Tools\ObservableCollectionExtension.cs" />
-    <Compile Include="Profile.cs" />
-    <Compile Include="Save.cs" />
     <Compile Include="VMMain.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -156,6 +151,16 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SoulsOrganizer.Profiles\SoulsOrganizer.Profiles.csproj">
+      <Project>{aa964b6c-a0b6-4e8a-9f93-5fafe36e3d71}</Project>
+      <Name>SoulsOrganizer.Profiles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SoulsOrganizer.Tools\SoulsOrganizer.Tools.csproj">
+      <Project>{022ed517-1b82-4d5b-b5f8-501dcae2764b}</Project>
+      <Name>SoulsOrganizer.Tools</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

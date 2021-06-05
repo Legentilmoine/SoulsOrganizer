@@ -2,6 +2,7 @@
 using NHotkey;
 using NHotkey.Wpf;
 using SoulsOrganizer.Configs;
+using SoulsOrganizer.Profiles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,23 +93,23 @@ namespace SoulsOrganizer
         private void btDuplicate_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             var element = sender as System.Windows.Controls.Control;
-            if (element?.DataContext is Save)
+            if (element?.DataContext is ISave)
                 ((VMMain)DataContext).DuplicateSave();
-            if (element?.DataContext is Profile)
+            if (element?.DataContext is IProfile)
                 ((VMMain)DataContext).DuplicateProfile();
         }
 
         private void btDelete_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             var element = sender as System.Windows.Controls.Control;
-            if (element?.DataContext is Save)
+            if (element?.DataContext is ISave)
             {
                 var model = DeleteSaveModel();
                 AdonisUI.Controls.MessageBox.Show(this, model);
                 if (model.Result == MessageBoxResult.Yes)
                     ((VMMain)DataContext).DeleteSave();// model.CheckBoxes.FirstOrDefault()?.IsChecked ?? false);
             }
-            if (element?.DataContext is Profile)
+            if (element?.DataContext is IProfile)
             {
                 var model = DeleteProfileModel();
                 AdonisUI.Controls.MessageBox.Show(this, model);
@@ -120,9 +121,9 @@ namespace SoulsOrganizer
         private void btBrowseSave_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.FileName = ((VMMain)DataContext).EditProfile.SaveFile;
+            dialog.FileName = ((SimpleFileProfile)((VMMain)DataContext).EditProfile).SaveFile;
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                ((VMMain)DataContext).EditProfile.SaveFile = dialog.FileName;
+                ((SimpleFileProfile)((VMMain)DataContext).EditProfile).SaveFile = dialog.FileName;
         }
 
         private void btBrowseLocation_Click(object sender, System.Windows.RoutedEventArgs e)

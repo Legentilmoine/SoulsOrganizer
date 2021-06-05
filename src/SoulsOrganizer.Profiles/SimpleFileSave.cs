@@ -2,11 +2,11 @@
 using SoulsOrganizer.Tools;
 using System;
 
-namespace SoulsOrganizer
+namespace SoulsOrganizer.Profiles
 {
-    public class Save : PropertyChangedBase
+    public class SimpleFileSave : PropertyChangedBase, ISave
     {
-        private Profile _profile;
+        private SimpleFileProfile _profile;
         private string _name;
 
         public string Name
@@ -22,7 +22,7 @@ namespace SoulsOrganizer
             }
         }
 
-        public Save(Profile profile, string name = null)
+        public SimpleFileSave(SimpleFileProfile profile, string name = null)
         {
             _profile = profile;
             if (string.IsNullOrEmpty(name))
@@ -30,7 +30,7 @@ namespace SoulsOrganizer
             _name = name;
         }
 
-        public Save Copy()
+        public virtual ISave Copy()
         {
             try
             {
@@ -39,7 +39,7 @@ namespace SoulsOrganizer
                 var newDossier = System.IO.Path.Combine(_profile.SaveFolder, name);
                 DirectoryExtension.Copy(dossier, newDossier);
                 LogManagement.AddInfo($"Save {Name} copied.");
-                return new Save(_profile, name);
+                return new SimpleFileSave(_profile, name);
             }
             catch (UnauthorizedAccessException)
             {
@@ -56,7 +56,7 @@ namespace SoulsOrganizer
             return null;
         }
 
-        public void Rename(string newName)
+        public virtual void Rename(string newName)
         {
             if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(newName))
                 return;
@@ -84,7 +84,7 @@ namespace SoulsOrganizer
             }
         }
 
-        public void Delete()
+        public virtual void Delete()
         {
             try
             {
@@ -107,7 +107,7 @@ namespace SoulsOrganizer
             }
         }
 
-        public void Create()
+        public virtual void Create()
         {
             try
             {
@@ -136,7 +136,7 @@ namespace SoulsOrganizer
             }
         }
 
-        public void Restore()
+        public virtual void Restore()
         {
             try
             {

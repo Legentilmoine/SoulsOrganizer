@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace SoulsOrganizer
+namespace SoulsOrganizer.Tools
 {
     public static class LogManagement
     {
@@ -35,33 +34,5 @@ namespace SoulsOrganizer
             Last = log;
         }
 
-    }
-
-    public class Log
-    {
-        public DateTime Date { get; private set; }
-        public LogType Type { get; private set; }
-        public string Message { get; private set; }
-
-        public Log(DateTime date, LogType type, string message)
-        {
-            Date = date;
-            Type = type;
-            Message = message;
-        }
-
-        public override string ToString()
-        {
-            return string.Format("{0:HH:mm:ss} - {1}", Date, Message);
-        }
-
-    }
-
-    public enum LogType
-    {
-        None = 0,
-        Info = 1,
-        Warning = 2,
-        Error = 3
     }
 }

@@ -3,26 +3,17 @@ using SoulsOrganizer.Tools;
 using System;
 using System.Collections.Generic;
 
-namespace SoulsOrganizer
+namespace SoulsOrganizer.Profiles
 {
-    public class Profile : PropertyChangedBase
+    public class SimpleFileProfile : PropertyChangedBase, IProfile
     {
-        private ProfileType _type;
         private string _save;
         private string _location;
         private string _name;
 
         #region "Properties"
 
-        public ProfileType Type
-        {
-            get { return _type; }
-            set
-            {
-                _type = value;
-                NotifyPropertyChanged("Type");
-            }
-        }
+        public virtual string Type => "SimpleFile";
 
         public string Name
         {
@@ -67,11 +58,14 @@ namespace SoulsOrganizer
         #endregion
         #region "Constructor"
 
-        public Profile()
+        public SimpleFileProfile()
         {
+            Name = "Name";
+            SaveFile = "Save File";
+            Location = "Location";
         }
 
-        public Profile(string name, string saveFile, string location)
+        public SimpleFileProfile(string name, string saveFile, string location)
         {
             if (string.IsNullOrWhiteSpace(saveFile))
                 throw new ArgumentException($"'{nameof(saveFile)}' cannot be null or whitespace.", nameof(saveFile));
@@ -88,24 +82,37 @@ namespace SoulsOrganizer
 
         #region "Functions"
 
-        public IEnumerable<Save> EnumerateSaves()
+        public virtual IEnumerable<ISave> EnumerateSaves()
         {
             var saveFileName = System.IO.Path.GetFileName(SaveFile);
             foreach (var file in System.IO.Directory.EnumerateFiles(SaveFolder, saveFileName, System.IO.SearchOption.AllDirectories))
             {
                 var saveName = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(file));
-                yield return new Save(this, saveName);
+                yield return CreateSave(saveName);
             }
         }
 
-        public bool Rename(string newName)
+        public virtual void Clone(IProfile profileToClone)
+        {
+            Rename(profileToClone.Name);
+            Move(profileToClone.Location);
+            if (profileToClone is SimpleFileProfile)
+                SaveFile = ((SimpleFileProfile)profileToClone).SaveFile;
+
+        }
+
+        public virtual ISave CreateSave(string saveName = null)
+        {
+            return new SimpleFileSave(this, saveName);
+        }
+
+        public virtual bool Rename(string newName)
         {
             if (string.Equals(Name, newName))
                 return true;
 
             try
             {
-
                 var oldName = Name;
                 Name = newName;
                 var oldFolder = System.IO.Path.Combine(Location, oldName);
@@ -127,7 +134,35 @@ namespace SoulsOrganizer
             return false;
         }
 
-        public Profile Copy()
+        public virtual bool Move(string newLocation)
+        {
+            if (string.Equals(Location, newLocation))
+                return true;
+
+            try
+            {
+                var oldLocation = Location;
+                Location = newLocation;
+                if (oldLocation == null || oldLocation.Equals("Location") || !System.IO.Directory.Exists(SaveFolder))
+                    return true;
+                var oldFolder = System.IO.Path.Combine(oldLocation, Name);
+                var newFolder = System.IO.Path.Combine(newLocation, Name);
+                System.IO.Directory.Move(oldFolder, newFolder);
+                LogManagement.AddInfo($"Profile {Name} moved.");
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                LogManagement.AddError("Unauthorized access: Unable to move profile.");
+            }
+            catch (System.IO.PathTooLongException)
+            {
+                LogManagement.AddError("Path too long: Unable to move profile.");
+            }
+            return false;
+        }
+
+        public virtual IProfile Copy()
         {
             try
             {
@@ -135,7 +170,7 @@ namespace SoulsOrganizer
                 var newDossier = System.IO.Path.Combine(Location, name);
                 DirectoryExtension.Copy(SaveFolder, newDossier);
                 LogManagement.AddInfo($"Profile {Name} copied.");
-                return new Profile(name, SaveFile, Location);
+                return new SimpleFileProfile(name, SaveFile, Location);
             }
             catch (UnauthorizedAccessException)
             {
@@ -152,7 +187,7 @@ namespace SoulsOrganizer
             return null;
         }
 
-        public void Delete()
+        public virtual void Delete()
         {
             try
             {
@@ -174,7 +209,7 @@ namespace SoulsOrganizer
             }
         }
 
-        public void Create()
+        public virtual void Create()
         {
             try
             {
@@ -198,11 +233,6 @@ namespace SoulsOrganizer
 
         #endregion
 
-    }
-
-    public enum ProfileType
-    {
-        Custom
     }
 
 }

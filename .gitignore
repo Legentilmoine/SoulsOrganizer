@@ -19,6 +19,7 @@ x64/
 x86/
 bld/
 tools/
+!src/SoulsOrganizer/Tools
 [Bb]in/
 [Oo]bj/
 [Ll]og/

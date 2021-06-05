@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SoulsOrganizer.Profiles;
+using System;
+using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
 namespace SoulsOrganizer.Configs
@@ -11,7 +13,10 @@ namespace SoulsOrganizer.Configs
         
         public List<ShortKey> ShortKeys { get; set; }
 
-        public List<Profile> Profiles { get; set; }
+        public List<IProfile> Profiles { get; set; }
+
+        [YamlIgnore]
+        public Dictionary<string, Type> Plugins { get; set; }
 
         [YamlIgnore]
         public static Config Instance
@@ -21,7 +26,7 @@ namespace SoulsOrganizer.Configs
                 if (_instance == null)
                     _instance = Read();
                 if (_instance.Profiles == null)
-                    _instance.Profiles = new List<Profile>();
+                    _instance.Profiles = new List<IProfile>();
                 return _instance;
             }
         }

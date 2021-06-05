@@ -1,5 +1,6 @@
 ﻿using AdonisUI.ViewModels;
 using SoulsOrganizer.Configs;
+using SoulsOrganizer.Profiles;
 using SoulsOrganizer.Tools;
 using System;
 using System.Collections.Generic;
@@ -12,11 +13,12 @@ namespace SoulsOrganizer
     public class VMMain : PropertyChangedBase
     {
         public event EventHandler ReloadConfig;
-        private ObservableCollection<Profile> _profiles;
-        private ObservableCollection<Save> _saves;
-        private Profile _selectedProfile;
-        private Save _selectedSave;
-        private Profile _editProfile;
+        private ObservableCollection<IProfile> _profiles;
+        private ObservableCollection<ISave> _saves;
+        private Type _selectedProfileType;
+        private IProfile _selectedProfile;
+        private ISave _selectedSave;
+        private IProfile _editProfile;
         private string _editSave;
         private bool _openEditProfile;
         private bool _displaySettings;
@@ -141,31 +143,43 @@ namespace SoulsOrganizer
             }
         }
 
-        public Profile EditProfile
+        public Dictionary<string, Type> ProfilesTypes
+        {
+            get { return Configs.Config.Instance.Plugins; }
+        }
+
+        public Type SelectedProfileType
+        {
+            get { return _selectedProfileType; }
+            set { _selectedProfileType = value; SelectedProfileTypeChanged(); NotifyPropertyChanged("EditProfileType"); }
+        }
+
+        public IProfile EditProfile
         {
             get { return _editProfile; }
             set { _editProfile = value; NotifyPropertyChanged("EditProfile"); }
         }
 
-        public Profile SelectedProfile
+
+        public IProfile SelectedProfile
         {
             get { return _selectedProfile; }
             set { _selectedProfile = value; SelectedProfileChanged(); NotifyPropertyChanged("SelectedProfile"); }
         }
          
-        public ObservableCollection<Profile> Profiles
+        public ObservableCollection<IProfile> Profiles
         {
             get { return _profiles; }
             set { _profiles = value; NotifyPropertyChanged("Profiles"); }
         }
 
-        public ObservableCollection<Save> Saves
+        public ObservableCollection<ISave> Saves
         {
             get { return _saves; }
             set { _saves = value; NotifyPropertyChanged("Saves"); }
         }
 
-        public Save SelectedSave
+        public ISave SelectedSave
         {
             get { return _selectedSave; }
             set { _selectedSave = value; SelectedSaveChanged(); NotifyPropertyChanged("SelectedSave"); }
@@ -176,12 +190,14 @@ namespace SoulsOrganizer
 
         public VMMain()
         {
-            Profiles = new ObservableCollection<Profile>(Config.Instance.Profiles);
-            Saves = new ObservableCollection<Save>();
+            Profiles = new ObservableCollection<IProfile>(Config.Instance.Profiles);
+            Saves = new ObservableCollection<ISave>();
             EditProfile = CreateNewProfile();
             SelectedProfile = Profiles.FirstOrDefault();
             OpenEditProfile = SelectedProfile == null;
+            SelectedProfileType = ProfilesTypes.Any() ? ProfilesTypes.FirstOrDefault().Value : null;
         } 
+
         #endregion
 
         #region "Profiles"
@@ -206,19 +222,25 @@ namespace SoulsOrganizer
             NotifyPropertyChanged("Last");
         }
 
-        private Profile CreateNewProfile(Profile baseProfile = null)
+        private void SelectedProfileTypeChanged()
         {
-            return new Profile(
-                baseProfile?.Name ?? "Name",
-                baseProfile?.SaveFile ?? "Save File",
-                baseProfile?.Location ?? "Location"
-            );
+            EditProfile = CreateNewProfile();
+        }
+
+        private IProfile CreateNewProfile(IProfile baseProfile = null)
+        {
+            if (SelectedProfileType == null)
+                return null;
+
+            var profile = Activator.CreateInstance(SelectedProfileType) as IProfile;
+            if (baseProfile != null)
+                profile.Clone(baseProfile);
+            return profile;
         }
 
         public void UpdateProfile()
         {
-            SelectedProfile.Rename(EditProfile.Name);
-            SelectedProfile.SaveFile = EditProfile.SaveFile;
+            SelectedProfile.Clone(EditProfile);
             UpdateConfigFile();
             NotifyPropertyChanged("Last");
         }
@@ -272,7 +294,7 @@ namespace SoulsOrganizer
 
         public void InitilizeSaves()
         {
-            Saves = new ObservableCollection<Save>(SelectedProfile != null ? SelectedProfile.EnumerateSaves() : new List<Save>());
+            Saves = new ObservableCollection<ISave>(SelectedProfile != null ? SelectedProfile.EnumerateSaves() : new List<ISave>());
             SortSaves();
         }
 
@@ -299,7 +321,7 @@ namespace SoulsOrganizer
         {
             if (SelectedProfile == null)
                 return;
-            var save = new Save(SelectedProfile);
+            var save = SelectedProfile.CreateSave();
             save.Create();
             Saves.Add(save);
             SortSaves();

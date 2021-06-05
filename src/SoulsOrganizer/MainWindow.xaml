@@ -122,22 +122,29 @@
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="5"/>
                             <RowDefinition Height="25"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="25"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Save File"/>
-                        <TextBox x:Name="tbSave" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" 
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Type"/>
+                        <ComboBox x:Name="cbType" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" SelectedValuePath="Value" DisplayMemberPath="Key"
+                                  ItemsSource="{Binding ProfilesTypes}" SelectedValue="{Binding SelectedProfileType, Mode=TwoWay}"/>
+                        
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Save File"/>
+                        <TextBox x:Name="tbSave" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3" 
                                  Text="{Binding EditProfile.SaveFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"/>
-                        <Button x:Name="btBrowseSave" Grid.Row="1" Grid.Column="6" Content="..."  Click="btBrowseSave_Click"/>
+                        <Button x:Name="btBrowseSave" Grid.Row="3" Grid.Column="6" Content="..."  Click="btBrowseSave_Click"/>
 
-                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Location"/>
-                        <TextBox x:Name="tbLocation" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3" 
+                        <TextBlock Grid.Row="5" Grid.Column="0" Text="Location"/>
+                        <TextBox x:Name="tbLocation" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="3" 
                                  Text="{Binding EditProfile.Location, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"/>
-                        <Button x:Name="btBrowseLocation" Grid.Row="3" Grid.Column="6" Content="..." Click="btBrowseLocation_Click"/>
+                        <Button x:Name="btBrowseLocation" Grid.Row="5" Grid.Column="6" Content="..." Click="btBrowseLocation_Click"/>
 
-                        <TextBlock Grid.Row="5" Grid.Column="0" Text="Name" />
-                        <TextBox x:Name="tbName" Grid.Row="5" Grid.Column="2" 
+                        <TextBlock Grid.Row="7" Grid.Column="0" Text="Name" />
+                        <TextBox x:Name="tbName" Grid.Row="7" Grid.Column="2" 
                                  Text="{Binding EditProfile.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"/>
-                        <Button x:Name="btNew" Grid.Row="5" Grid.Column="4" Content="New" Click="btNew_Click">
+                        <Button x:Name="btNew" Grid.Row="7" Grid.Column="4" Content="New" Click="btNew_Click">
                             <Button.IsEnabled>
                                 <MultiBinding Converter="{StaticResource MultiConvBoolean}" ConverterParameter="OR NOT" Mode="TwoWay">
                                     <Binding ElementName="tbSave" Path="(Validation.HasError)" />
@@ -146,7 +153,7 @@
                                 </MultiBinding>
                             </Button.IsEnabled>
                         </Button>
-                        <Button x:Name="btUpdate" Grid.Row="5" Grid.Column="6" Content="Update" Click="btUpdate_Click"
+                        <Button x:Name="btUpdate" Grid.Row="7" Grid.Column="6" Content="Update" Click="btUpdate_Click"
                                 Visibility="{Binding SelectedProfile, Converter={StaticResource ConvNullToVisibility}}">
                             <Button.IsEnabled>
                                 <MultiBinding Converter="{StaticResource MultiConvBoolean}" ConverterParameter="OR NOT" Mode="TwoWay">
