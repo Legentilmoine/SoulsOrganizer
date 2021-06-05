@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
 
 namespace SoulsOrganizer.Profiles
 {
@@ -6,6 +7,8 @@ namespace SoulsOrganizer.Profiles
     {
         string Name { get; }
         string Type { get; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        UIElement UI { get; }
         string Location { get; set; }
 
 
@@ -17,5 +20,6 @@ namespace SoulsOrganizer.Profiles
         bool Move(string newLocation);
         void Clone(IProfile profileToClone);
         IEnumerable<ISave> EnumerateSaves();
+
     }
 }

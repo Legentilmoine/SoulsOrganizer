@@ -119,8 +119,8 @@
                             <RowDefinition Height="5"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="5"/>
-                            <RowDefinition Height="25"/>
-                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="0"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="5"/>
                             <RowDefinition Height="25"/>
@@ -131,10 +131,8 @@
                         <ComboBox x:Name="cbType" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" SelectedValuePath="Value" DisplayMemberPath="Key"
                                   ItemsSource="{Binding ProfilesTypes}" SelectedValue="{Binding SelectedProfileType, Mode=TwoWay}"/>
                         
-                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Save File"/>
-                        <TextBox x:Name="tbSave" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3" 
-                                 Text="{Binding EditProfile.SaveFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"/>
-                        <Button x:Name="btBrowseSave" Grid.Row="3" Grid.Column="6" Content="..."  Click="btBrowseSave_Click"/>
+                        <ContentPresenter Grid.Row="3" Grid.Column="0" Margin="0,0,0,5" Grid.ColumnSpan="7" Content="{Binding EditProfile.UI}"
+                                          Visibility="{Binding EditProfile.UI, Converter={StaticResource ConvNullToVisibility}}"/>
 
                         <TextBlock Grid.Row="5" Grid.Column="0" Text="Location"/>
                         <TextBox x:Name="tbLocation" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="3" 

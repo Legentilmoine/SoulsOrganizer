@@ -2,6 +2,7 @@
 using SoulsOrganizer.Tools;
 using System;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace SoulsOrganizer.Profiles
 {
@@ -49,6 +50,15 @@ namespace SoulsOrganizer.Profiles
                     throw new ArgumentException($"'{nameof(Location)}' cannot be null or whitespace.", nameof(Location));
                 _location = value;
                 NotifyPropertyChanged("Location");
+            }
+        }
+
+        [YamlDotNet.Serialization.YamlIgnore]
+        public UIElement UI
+        {
+            get
+            {
+                return new UIProfile() { DataContext = this };
             }
         }
 

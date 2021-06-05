@@ -1,6 +1,7 @@
 ﻿using AdonisUI.ViewModels;
 using SoulsOrganizer.Tools;
 using System;
+using System.Windows;
 
 namespace SoulsOrganizer.Profiles
 {
@@ -21,6 +22,13 @@ namespace SoulsOrganizer.Profiles
                 NotifyPropertyChanged("Name");
             }
         }
+
+        [YamlDotNet.Serialization.YamlIgnore]
+        public UIElement UI
+        {
+            get { return null; }
+        }
+
 
         public SimpleFileSave(SimpleFileProfile profile, string name = null)
         {

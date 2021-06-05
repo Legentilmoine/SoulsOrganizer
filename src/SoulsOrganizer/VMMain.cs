@@ -160,7 +160,6 @@ namespace SoulsOrganizer
             set { _editProfile = value; NotifyPropertyChanged("EditProfile"); }
         }
 
-
         public IProfile SelectedProfile
         {
             get { return _selectedProfile; }

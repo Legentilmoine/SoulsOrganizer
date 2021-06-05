@@ -118,14 +118,6 @@ namespace SoulsOrganizer
             }
         }
 
-        private void btBrowseSave_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.FileName = ((SimpleFileProfile)((VMMain)DataContext).EditProfile).SaveFile;
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                ((SimpleFileProfile)((VMMain)DataContext).EditProfile).SaveFile = dialog.FileName;
-        }
-
         private void btBrowseLocation_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog();
